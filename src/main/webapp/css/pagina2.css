@@ -1,0 +1,52 @@
+
+
+body{
+    background-color:#f7f7f7;
+    color:#0044ff;
+    margin:0;
+    font-family:arial;
+    text-align:center;
+}
+#dialogo{
+    width:1010px;
+    height:40px;
+    margin-left:auto;
+    margin-right:auto;
+    background-color:#f7f7f7;
+}
+#divMedidoresCadastrados{
+    font-size:16pt;
+    width:1000px;
+    height:455px;
+    border:1px solid lightgray;
+    margin-left:auto;
+    margin-right:auto;
+    background-color:white;
+    box-shadow: 0 1px 6px grey;
+}
+#tabelamedidores{
+    border-bottom:3px solid black;
+    border-collapse:collapse;
+    margin-left:auto;
+    margin-right:auto;
+}
+#tabelamedidores tr{
+    height:35px;
+}
+#tabelamedidores td{
+    border-bottom:3px solid black;
+    border-collapse:collapse;
+    width:270px;
+}
+#tabelamedidores input{
+    font-size:16pt;
+    color:#0044ff;
+    text-align:center;
+    width:265px;
+    border:1px solid lightgray;
+}
+
+
+
+
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/TrabalhoPA">
+  <Resource 
+      auth="Container" 
+      driverClassName="org.postgresql.Driver" 
+      logAbandoned="false" 
+      maxActive="200" 
+      maxIdle="100" 
+      maxWait="-1" 
+      removeAbandoned="true" 
+      removeAbandonedTimeout="60" 
+      type="javax.sql.DataSource" 
+      url="jdbc:postgresql://localhost:5433/tempumidade" 
+      name="jdbc/nomeDeFantasia" 
+      username="postgres"
+      password="123456" 
+  />
+  
+</Context>
