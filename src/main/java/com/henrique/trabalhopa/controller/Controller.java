@@ -20,8 +20,9 @@ public class Controller extends HttpServlet {
         System.out.println("Controller");
         try{
             String nomeDoTratadorDePagina = request.getParameter("tratador");
-            Class classe = Class.forName(nomeDoTratadorDePagina);
-            TratadordePagina tratador = (TratadordePagina) classe.newInstance();
+            if(nomeDoTratadorDePagina == null) nomeDoTratadorDePagina = "com.henrique.trabalhopa.pagehandlers.Tratadorpg1";
+            
+            TratadordePagina tratador = (TratadordePagina) Class.forName(nomeDoTratadorDePagina).newInstance();
             jspURL = tratador.processar(request, response);
         } catch (Exception e) {
             request.setAttribute("EXCESSAO_CONTROLLER", e.toString());

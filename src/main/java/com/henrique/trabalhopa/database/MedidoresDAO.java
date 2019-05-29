@@ -21,31 +21,25 @@ public class MedidoresDAO extends BaseDAO{
             ArrayList<MedidoresDTO> listademedidores = new ArrayList<>();
             MedidoresDTO dto = new MedidoresDTO();
             Connection con = getConnection();
-        try{
-            PreparedStatement pstmt;
-            pstmt = con.prepareStatement(
-                "SELECT * FROM medidores");
-            ResultSet rst = pstmt.executeQuery();
-            while(rst.next()){
-                dto.setMedidoresSerialNo(rst.getString("serialno_medidores"));
-                dto.setNome(rst.getString("nome"));
-                dto.setTabela(rst.getString("tabela"));
-                listademedidores.add(dto);
+            try{
+                PreparedStatement pstmt;
+                pstmt = con.prepareStatement(
+                    "SELECT * FROM medidores");
+                ResultSet rst = pstmt.executeQuery();
+                while(rst.next()){
+                    dto.setMedidoresSerialNo(rst.getString(1));
+                    dto.setNome(rst.getString(2));
+                    dto.setTabela(rst.getString(3));
+                    listademedidores.add(dto);
+                }
+                con.close();
+                return listademedidores;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-               try {
-                    if(con!=null){
-                        con.close();
-                    }
-               } catch(Exception e){
-                   e.printStackTrace();
-               }
-           }
-        return listademedidores; 
         }
-        
+            
         boolean doCreate(MedidoresDTO dto){
 //        try {
 //            Connection con = getConnection();

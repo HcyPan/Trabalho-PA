@@ -10,6 +10,8 @@ import com.henrique.trabalhopa.database.MedidasDAO;
 import com.henrique.trabalhopa.database.MedidoresDAO;
 import com.henrique.trabalhopa.database.MedidoresDTO;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,26 +27,56 @@ public class Tratadorpg1 implements TratadordePagina{
     
     @Override
     public String processar(HttpServletRequest request, HttpServletResponse response) {
+        String jspURL = "pagina1.jsp";
         MedidasDAO medidasDAO = new MedidasDAO();
-        List<MedidasDTO> listaDeMedidas = new ArrayList<>();
-        String medidor = request.getParameter("selectVariaveis");
         MedidoresDAO medidoresDAO = new MedidoresDAO();
-        ArrayList<MedidoresDTO> listaDeMedidores = new ArrayList<>();
-        try {
-            listaDeMedidores = medidoresDAO.doRead();
-            request.getSession().setAttribute("listademedidores", listaDeMedidores);
-            if(medidor.equals("sala")){
-                listaDeMedidas = medidasDAO.doRead(medidor);
-                request.getSession().setAttribute("resposta", listaDeMedidas);
+        String acao = request.getParameter("action");
+        switch(acao){
+            case "search":
+                String medidor = request.getParameter("selectVariaveis");
+                String tempo = request.getParameter("selectPeriodo");
+                DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyy");
+                LocalDate dataFinal = LocalDate.parse(request.getParameter("dataFinal"), formatadorData);
+                LocalDate dataInicial = null;
+                switch(tempo){
+                    case "diaio":
+                        dataInicial = dataFinal.minusDays(1);
+                        break;
+                    case "semanal":
+                        dataInicial = dataFinal.minusWeeks(1);
+                        break;
+                    case "mensal":
+                        dataInicial = dataFinal.minusMonths(1);
+                        break;
+                    case "anual":
+                        dataInicial = dataFinal.minusYears(1);
+                        break;
+                }
+            ArrayList<MedidasDTO> medidas = null;
+            try {
+                medidas = medidasDAO.doRead(medidor, dataInicial, dataFinal);
+            } catch (SQLException ex) {
+                Logger.getLogger(Tratadorpg1.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Tratadorpg1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("PageHandler");
+            request.getSession().setAttribute("medidas", medidas);
+            
+            request.getSession().setAttribute("selectVariaveis", medidor);
+            request.getSession().setAttribute("selectPeriodo", tempo);
+            request.getSession().setAttribute("dataFinal", dataFinal);
+            
+            ArrayList<MedidoresDTO> medidores = medidoresDAO.doRead();
+            request.getSession().setAttribute("medidores", medidores);
+            break;
 
-        return "/pagina1-resp.jsp";
+        default:
+            request.getSession().removeAttribute("medidas");
+            medidores = medidoresDAO.doRead();
+            request.getSession().setAttribute("medidores", medidores);
+        }
+        return jspURL;
     }
+}
 //System.out.println("tratador da pagina 1");
  
     
-}
+

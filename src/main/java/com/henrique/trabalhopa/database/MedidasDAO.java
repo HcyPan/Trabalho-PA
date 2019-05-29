@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,6 @@ import java.util.List;
  * @author Henrique
  */
 public class MedidasDAO extends BaseDAO{
-    
-    public List<MedidasDTO> lista = new ArrayList<MedidasDTO>();    
 
     boolean doCreate(MedidasDTO dto){
 //        try {
@@ -39,39 +38,32 @@ public class MedidasDAO extends BaseDAO{
         return true;
     }
     
-    public List<MedidasDTO> doRead(String medidor) throws SQLException{
+    public ArrayList<MedidasDTO> doRead(String medidor, LocalDate dataInicial, LocalDate dataFinal) throws SQLException{
         Connection con = getConnection();
-        PreparedStatement pstmt;
         MedidasDTO resp = new MedidasDTO();
-
         try{
-            pstmt = con.prepareStatement(
-            "SELECT * FROM medidor001");
-            ResultSet rst = pstmt.executeQuery();
-            while(rst.next()){
-                resp.setDataHora(rst.getDate("datahora"));
-                resp.setMedidor(rst.getString("medidor"));
-                resp.setTemperatura(rst.getFloat("temperatura"));
-                resp.setUmidade(rst.getInt("umidade"));
-                resp.setSerialNo(rst.getInt("serialno"));
+            PreparedStatement pstmt = con.prepareStatement(
+            "SELECT * FROM "+medidor+""+"WHERE datahora > ? and datahora <?");
+            pstmt.setObject(1, dataInicial);
+            pstmt.setObject(2, dataFinal);
+            ResultSet rstst = pstmt.executeQuery();
+            ArrayList<MedidasDTO> lista = new ArrayList();
+            while(rstst.next()){
+                resp.setSerialNo(rstst.getString(1));
+                resp.setMedidor(rstst.getString(2));
+                resp.setTemperatura(rstst.getString(3));
+                resp.setUmidade(rstst.getString(4));
+                resp.setDataHora(rstst.getString(5));
+                resp.setSerial(rstst.getString(6));
                 lista.add(resp);
                 }
+            System.out.println("Read");
+            return lista;
             }
         catch (Exception e) {
             e.printStackTrace();
+            return null;
             }
-        finally {
-            if(con!=null){
-                try{
-                    con.close();
-                    }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        System.out.println("Read");
-        return lista;
     }
     
     boolean doUpdate(MedidasDTO dto){

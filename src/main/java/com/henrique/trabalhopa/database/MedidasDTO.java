@@ -13,17 +13,26 @@ import java.sql.Date;
  */
 public class MedidasDTO implements Serializable {
     
-    private int serialNo;
+    private String serialNo;
     private String medidor;
-    private float temperatura;
-    private int umidade;
-    private Date dataHora;
+    private String temperatura;
+    private String umidade;
+    private String dataHora;
+    private String serial;
 
-    public int getSerialNo() {
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+    
+    public String getSerialNo() {
         return serialNo;
     }
 
-    public void setSerialNo(int serialNo) {
+    public void setSerialNo(String serialNo) {
         this.serialNo = serialNo;
     }
 
@@ -35,28 +44,28 @@ public class MedidasDTO implements Serializable {
         this.medidor = medidor;
     }
 
-    public float getTemperatura() {
+    public String getTemperatura() {
         return temperatura;
     }
 
-    public void setTemperatura(float temperatura) {
+    public void setTemperatura(String temperatura) {
         this.temperatura = temperatura;
     }
 
-    public int getUmidade() {
+    public String getUmidade() {
         return umidade;
     }
 
-    public void setUmidade(int umidade) {
+    public void setUmidade(String umidade) {
         this.umidade = umidade;
     }
 
-    public Date getDataHora() {
+    public String getDataHora() {
         return dataHora;
     }
-    
-    public void setDataHora(Date dataHora) {
+
+    public void setDataHora(String dataHora) {
         this.dataHora = dataHora;
     }
-}
 
+}

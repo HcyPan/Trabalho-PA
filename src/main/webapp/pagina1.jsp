@@ -26,37 +26,24 @@
     </head>
 
     <body>
-        <form id="form1" method="GET" action="controller">
-            <input type="hidden" name="tratador" value="com.henrique.trabalhopa.pagehandlers.Tratadorpg1"/>
+        
 
             <h1>Home Automation</h1>
 
             <div id="dialogo">
             </div>
-
-            <div id="divComandos">
-                <div class="caixas_menu">
+            <form id="form1" method="GET" action="controller">
+                <input type="hidden" name="tratador" value="com.henrique.trabalhopa.pagehandlers.Tratadorpg1"/>
+                <input type="hidden" name="action" value="search"/>
+                <div id="divComandos">
+                    <div class="caixas_menu">
                     MEDIDOR
                     <select id="selectVariaveisDashboard" name="selectVariaveis">
-                        <% ArrayList<MedidoresDTO> listaDeMedidores = (ArrayList<MedidoresDTO>) request.getAttribute("listademedidores");
+                        <% ArrayList<MedidoresDTO> listaDeMedidores = (ArrayList<MedidoresDTO>) request.getSession().getAttribute("medidores");
                             for(MedidoresDTO medidor : listaDeMedidores){%>
-                            <option value="<%= medidor.getTabela()%>" selected> <%= medidor.getNome()%></option>
+                            <option value="<% out.print(medidor.getTabela());%>" selected> <% out.print(medidor.getNome());%></option>
                             <%}%>
-                        <%  MedidoresDTO medidores = new MedidoresDTO();
-                            try{
-                            Class.forName("org.postgresql.Driver");
-                            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/tempumidade" , "postgres", "123456");
-                            Statement stmt = connection.createStatement();
-                            String sql = "SELECT * FROM medidores";
-                            ResultSet rst = stmt.executeQuery(sql);
-                            while(rst.next()){ 
-                                medidores.setNome(rst.getString("nome"));
-                                medidores.setTabela(rst.getString("tabela"));%>
-                                <option value=" <%= medidores.getTabela() %>" selected> <%= medidores.getNome() %> </option>
-                        <% }
-                        } catch(Exception e){
-                                e.printStackTrace();
-                        } %>
+                        
                             
                         <!-- <option value="sala" selected>Sala</option>
                         <option value="quarto1">Quarto 1</option>
@@ -77,7 +64,7 @@
                 </div>
                 <div class="caixas_menu">
                     DATA FINAL
-                    <input id="datafinal" type="text" value="20/10/2019"/>
+                    <input id="datafinal" name="dataFinal" type="text" value="20/10/2019"/>
                 </div>
                 <div class="caixas_menu">
                     <span id="labelGrafico">GRÁFICO</span>/<span id="labelTabela" 
@@ -96,9 +83,9 @@
                     </a>
                 </div>
             </div>
+         </form>
 
             <div id="divGraficoTabela">
             </div>
-        </form>
     </body>
 </html>
