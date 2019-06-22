@@ -1,7 +1,9 @@
 package com.henrique.trabalhopa.controller;
 
+import com.henrique.trabalhopa.pagehandlers.GenericResponse;
 import com.henrique.trabalhopa.pagehandlers.TratadordePagina;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,23 +16,31 @@ import javax.servlet.http.HttpServletResponse;
 public class Controller extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String jspURL = "/index.jsp";
         request.setCharacterEncoding("UTF8");
         response.setCharacterEncoding("UTF8");
-        System.out.println("Controller");
         try{
             String nomeDoTratadorDePagina = request.getParameter("tratador");
             if(nomeDoTratadorDePagina == null) nomeDoTratadorDePagina = "com.henrique.trabalhopa.pagehandlers.Tratadorpg1";
             
             TratadordePagina tratador = (TratadordePagina) Class.forName(nomeDoTratadorDePagina).newInstance();
-            jspURL = tratador.processar(request, response);
+            
+            GenericResponse resp = tratador.processar(request, response);
+            String responsePageName = resp.forward;
+            System.out.println(responsePageName);
+            if(resp.respostaCrua!= null){
+                PrintWriter p = response.getWriter();
+                p.write(resp.respostaCrua);
+                p.flush();
+                p.close();
+            }
+            else{
+                request.getRequestDispatcher(responsePageName).forward(request, response);
+            }
         } catch (Exception e) {
             request.setAttribute("EXCESSAO_CONTROLLER", e.toString());
-            request.getRequestDispatcher("/erro.jsp").forward(request, response);
-        } finally {
-            response.setContentType("text/html;charset=UTF-8");
-            request.getRequestDispatcher(jspURL).forward(request, response);
-        }
+            request.getRequestDispatcher("/pagina1.jsp").forward(request, response);
+            e.printStackTrace();
+        } 
             
     }
 

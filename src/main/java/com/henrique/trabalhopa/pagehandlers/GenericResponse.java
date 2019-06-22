@@ -4,13 +4,17 @@
  * and open the template in the editor.
  */
 package com.henrique.trabalhopa.pagehandlers;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Henrique
  */
-public interface TratadordePagina {
-    public GenericResponse processar(HttpServletRequest request, HttpServletResponse response);
+public class GenericResponse {
+    public String respostaCrua = null;
+    public String redirect = null;
+    public String forward = null;
+    public String responseType = null;
+    public GenericResponse(){
+        
+    }
 }

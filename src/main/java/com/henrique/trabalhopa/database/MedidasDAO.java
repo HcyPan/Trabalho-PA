@@ -40,15 +40,16 @@ public class MedidasDAO extends BaseDAO{
     
     public ArrayList<MedidasDTO> doRead(String medidor, LocalDate dataInicial, LocalDate dataFinal) throws SQLException{
         Connection con = getConnection();
-        MedidasDTO resp = new MedidasDTO();
+        System.out.println("MedidasDAO do");
         try{
+            ArrayList<MedidasDTO> lista = new ArrayList();
             PreparedStatement pstmt = con.prepareStatement(
-            "SELECT * FROM "+medidor+""+"WHERE datahora > ? and datahora <?");
+            "SELECT * FROM medidor001 WHERE datahora > ? and datahora <?");
             pstmt.setObject(1, dataInicial);
             pstmt.setObject(2, dataFinal);
             ResultSet rstst = pstmt.executeQuery();
-            ArrayList<MedidasDTO> lista = new ArrayList();
             while(rstst.next()){
+                MedidasDTO resp = new MedidasDTO();
                 resp.setSerialNo(rstst.getString(1));
                 resp.setMedidor(rstst.getString(2));
                 resp.setTemperatura(rstst.getString(3));

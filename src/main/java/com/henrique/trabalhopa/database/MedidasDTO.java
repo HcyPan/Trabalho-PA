@@ -7,6 +7,8 @@ package com.henrique.trabalhopa.database;
 
 import java.io.Serializable;
 import java.sql.Date;
+import javax.json.Json;
+import javax.json.JsonObject;
 /**
  *
  * @author Henrique
@@ -66,6 +68,35 @@ public class MedidasDTO implements Serializable {
 
     public void setDataHora(String dataHora) {
         this.dataHora = dataHora;
+    }
+    
+    JsonObject objetoJSON;
+    
+    public JsonObject getObjetoJSON() {
+        return objetoJSON;
+    }
+
+    public void setObjetoJSON(JsonObject objetoJSON) {
+        this.objetoJSON = objetoJSON;
+    }
+    
+    public JsonObject toJSON(){
+
+        objetoJSON = Json.createObjectBuilder()
+                .add("serialNo", serialNo)
+                .add("medidor", medidor)
+                .add("temperatura", temperatura)
+                .add("umidade", umidade)
+                .add("dataHora", dataHora)
+                .add("serial", serial)
+                .build();
+        
+        return objetoJSON;
+    }
+    
+    @Override
+    public String toString(){
+        return toJSON().toString();
     }
 
 }
